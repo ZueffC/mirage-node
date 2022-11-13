@@ -1,7 +1,6 @@
 package data
 
 import (
-	pkgs "github.com/zueffc/mirage-node/internal/data/actions/packages"
 	"gorm.io/gorm"
 )
 
@@ -11,6 +10,13 @@ type User struct {
 	Password string `json:"password"`
 }
 
+type Package struct {
+	AuthorID    uint   `json:"author_id" gorm:"unique"`
+	Name        string `json:"name" gorm:"unique"`
+	Description string `json:"description" gorm:"unique"`
+	GitURL      string `json:"git_url" gorm:"unique"`
+}
+
 type UserModel struct {
 	gorm.Model
 	User
@@ -18,5 +24,5 @@ type UserModel struct {
 
 type PackageModel struct {
 	gorm.Model
-	pkgs.Package
+	Package
 }

@@ -17,9 +17,10 @@ func main() {
 		users.POST("/delete", controllers.DeleteController)
 	}
 
-	router.POST("pkgs/search", nil)
-	router.POST("pkgs/add", nil)
-	router.POST("pkgs/edit")
+	packages := router.Group("/packages")
+	{
+		packages.POST("/", controllers.PackagesController)
+	}
 
 	router.Run()
 }
