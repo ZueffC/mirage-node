@@ -25,7 +25,7 @@ func Create(name, description, gitUrl string, authorId uint) error {
 	return errors.New("SIZE IS UNCOMPATIBLE")
 }
 
-func Find(queryType string, id uint) *[]data.PackageModel {
+func FindByID(queryType string, id uint) *[]data.PackageModel {
 	if queryType == "all" {
 		var packages []data.PackageModel
 
@@ -39,6 +39,18 @@ func Find(queryType string, id uint) *[]data.PackageModel {
 	} else {
 		return nil
 	}
+}
+
+func FindByName(name string) *data.PackageModel {
+	var pkg data.PackageModel
+
+	data.Database().Where(&data.PackageModel{
+		Package: data.Package{
+			Name: name,
+		},
+	}).Find(&pkg)
+
+	return &pkg
 }
 
 func Delete() {}
