@@ -1,11 +1,11 @@
 package data
 
 import (
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
+	"github.com/jinzhu/gorm"
+	_ "github.com/mattn/go-sqlite3"
 )
 
-var db, err = gorm.Open(sqlite.Open("test_database.db"), &gorm.Config{})
+var db, err = gorm.Open("sqlite3", "test_database.db")
 
 func Connect() {
 	if err != nil {

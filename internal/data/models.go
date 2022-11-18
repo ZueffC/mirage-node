@@ -1,7 +1,7 @@
 package data
 
 import (
-	"gorm.io/gorm"
+	"github.com/jinzhu/gorm"
 )
 
 type User struct {
