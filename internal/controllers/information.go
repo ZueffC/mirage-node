@@ -8,9 +8,8 @@ import (
 )
 
 type InformationQuery struct {
-	Type      string `json:"type"`
-	UserID    uint   `json:"user_id"`
-	PackageID uint   `json:"package_id"`
+	Type string `json:"type"`
+	Id   uint   `json:"id"`
 }
 
 func PackageInformationController(ctx *gin.Context) {
@@ -20,7 +19,7 @@ func PackageInformationController(ctx *gin.Context) {
 	}
 
 	if information.Type != "all" || information.Type != "current" {
-		res := packages.Find(information.Type, information.UserID)
+		res := packages.Find(information.Type, information.Id)
 		ctx.JSON(http.StatusOK, res)
 	} else {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Unknown type"})

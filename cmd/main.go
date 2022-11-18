@@ -9,6 +9,7 @@ import (
 func main() {
 	router := gin.Default()
 
+	//connection to database
 	data.Connect()
 
 	users := router.Group("/users")
