@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,6 +11,7 @@ import (
 type InformationQuery struct {
 	Type string `json:"type"`
 	Id   uint   `json:"id"`
+	Name string `json:"name"`
 }
 
 func PackageInformationController(ctx *gin.Context) {
@@ -18,8 +20,13 @@ func PackageInformationController(ctx *gin.Context) {
 		panic(err)
 	}
 
-	if information.Type != "all" || information.Type != "current" {
-		res := packages.Find(information.Type, information.Id)
+	fmt.Println(information.Type)
+
+	if information.Type == "all" {
+		res := packages.FindByID(information.Type, information.Id)
+		ctx.JSON(http.StatusOK, res)
+	} else if information.Type == "current" {
+		res := packages.FindByName(information.Name)
 		ctx.JSON(http.StatusOK, res)
 	} else {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Unknown type"})
