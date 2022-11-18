@@ -20,6 +20,7 @@ func main() {
 	packages := router.Group("/packages")
 	{
 		packages.POST("/", controllers.PackagesController)
+		packages.POST("/get", controllers.PackageInformationController)
 	}
 
 	router.Run()

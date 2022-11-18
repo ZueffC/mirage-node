@@ -22,9 +22,24 @@ func Create(name, description, gitUrl string, authorId uint) error {
 		return nil
 	}
 
-	return errors.New("Size is incompatible!")
+	return errors.New("SIZE IS UNCOMPATIBLE")
 }
 
-func Find()   {}
+func Find(queryType string, id uint) *[]data.PackageModel {
+	if queryType == "all" {
+		var packages []data.PackageModel
+
+		data.Database().Where(&data.PackageModel{
+			Package: data.Package{
+				AuthorID: id,
+			},
+		}).Find(&packages)
+
+		return &packages
+	} else {
+		return nil
+	}
+}
+
 func Delete() {}
 func Edit()   {}
