@@ -35,5 +35,5 @@ func main() {
 	}
 
 	router.Any("/admin/*resources", gin.WrapH(mux))
-	router.Run()
+	router.Run(":1984")
 }
