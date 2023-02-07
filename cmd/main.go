@@ -1,12 +1,15 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
+	"github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
 	"github.com/qor/admin"
 	"github.com/zueffc/mirage-node/internal/controllers"
 	"github.com/zueffc/mirage-node/internal/data"
+	"golang.org/x/crypto/acme/autocert"
 )
 
 func main() {
@@ -35,5 +38,12 @@ func main() {
 	}
 
 	router.Any("/admin/*resources", gin.WrapH(mux))
-	router.Run(":1984")
+
+	manager := autocert.Manager{
+		Prompt:     autocert.AcceptTOS,
+		HostPolicy: autocert.HostWhitelist("example1.com", "example2.com"),
+		Cache:      autocert.DirCache("/var/www/.cache"),
+	}
+
+	log.Fatal(autotls.RunWithManager(router, &manager))
 }
