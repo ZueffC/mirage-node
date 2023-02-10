@@ -26,3 +26,7 @@ type PackageModel struct {
 	gorm.Model
 	Package
 }
+
+func (u UserModel) DisplayName() string {
+	return u.User.Nick
+}

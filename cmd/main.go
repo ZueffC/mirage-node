@@ -2,29 +2,50 @@ package main
 
 import (
 	"log"
-	"net/http"
+	"time"
 
+	_ "github.com/GoAdminGroup/go-admin/adapter/gin"
+	_ "github.com/GoAdminGroup/go-admin/modules/db/drivers/sqlite"
+	"golang.org/x/crypto/acme/autocert"
+
+	"github.com/GoAdminGroup/themes/adminlte"
+
+	"github.com/GoAdminGroup/go-admin/engine"
+	"github.com/GoAdminGroup/go-admin/modules/config"
 	"github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
-	"github.com/qor/admin"
 	"github.com/zueffc/mirage-node/internal/controllers"
 	"github.com/zueffc/mirage-node/internal/data"
-	"golang.org/x/crypto/acme/autocert"
+	"github.com/zueffc/mirage-node/internal/data/foradmin"
 )
 
 func main() {
 	router := gin.Default()
 
+	eng := engine.Default()
+
+	cfg := config.Config{
+		Env: config.EnvLocal,
+		Databases: config.DatabaseList{
+			"default": {
+				Host:            "localhost",
+				Port:            "10000",
+				User:            "root",
+				Pwd:             "root",
+				Name:            "godmin",
+				MaxIdleConns:    50,
+				MaxOpenConns:    150,
+				ConnMaxLifetime: time.Hour,
+				Driver:          config.DriverSqlite,
+				File:            "./test_database.db",
+			},
+		},
+		UrlPrefix:   "admin",
+		ColorScheme: adminlte.ColorschemeSkinBlack,
+	}
+
 	//connection to database
 	data.Connect()
-
-	mux := http.NewServeMux()
-
-	Admin := admin.New(&admin.AdminConfig{DB: data.Database()})
-	Admin.AddResource(&data.UserModel{})
-	Admin.AddResource(&data.PackageModel{})
-	Admin.MountTo("/admin", mux)
-
 	users := router.Group("/users")
 	{
 		users.POST("/auth", controllers.AuthController)
@@ -37,7 +58,10 @@ func main() {
 		packages.POST("/get", controllers.PackageInformationController)
 	}
 
-	router.Any("/admin/*resources", gin.WrapH(mux))
+	eng.AddConfig(&cfg).
+		AddGenerators(foradmin.Generators).
+		AddGenerator("package_models", foradmin.GetPackagesTable).
+		Use(router)
 
 	sslManager := autocert.Manager{
 		Prompt:     autocert.AcceptTOS,
