@@ -11,7 +11,7 @@ type User struct {
 }
 
 type Package struct {
-	AuthorID    uint   `json:"author_id" gorm:"unique"`
+	AuthorID    uint   `json:"author_id"`
 	Name        string `json:"name" gorm:"unique"`
 	Description string `json:"description" gorm:"unique"`
 	GitURL      string `json:"git_url" gorm:"unique"`
