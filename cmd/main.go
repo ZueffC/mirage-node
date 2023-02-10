@@ -39,11 +39,11 @@ func main() {
 
 	router.Any("/admin/*resources", gin.WrapH(mux))
 
-	manager := autocert.Manager{
+	sslManager := autocert.Manager{
 		Prompt:     autocert.AcceptTOS,
-		HostPolicy: autocert.HostWhitelist("example1.com", "example2.com"),
+		HostPolicy: autocert.HostWhitelist("zueffc.ml"),
 		Cache:      autocert.DirCache("/var/www/.cache"),
 	}
 
-	log.Fatal(autotls.RunWithManager(router, &manager))
+	log.Fatal(autotls.RunWithManager(router, &sslManager))
 }
