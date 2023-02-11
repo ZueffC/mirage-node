@@ -6,7 +6,6 @@ import (
 
 	_ "github.com/GoAdminGroup/go-admin/adapter/gin"
 	_ "github.com/GoAdminGroup/go-admin/modules/db/drivers/sqlite"
-	"github.com/gin-contrib/cors"
 	"golang.org/x/crypto/acme/autocert"
 
 	"github.com/GoAdminGroup/themes/adminlte"
@@ -44,11 +43,6 @@ func main() {
 		UrlPrefix:   "admin",
 		ColorScheme: adminlte.ColorschemeSkinBlack,
 	}
-
-	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"https://mirage-pm.ml"}
-
-	router.Use(cors.New(config))
 
 	//connection to database
 	data.Connect()
